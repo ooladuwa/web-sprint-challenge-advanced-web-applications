@@ -10,8 +10,10 @@ function App() {
       <div className="App">
         <header>
           Color Picker Sprint Challenge
-          <a data-testid="logoutButton" href="#">logout</a>
-        </header> 
+          <a data-testid="logoutButton" href="#">
+            logout
+          </a>
+        </header>
 
         <Route exact path="/" component={Login} />
       </div>
