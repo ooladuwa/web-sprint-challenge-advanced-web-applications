@@ -9,13 +9,13 @@ const initialColor = {
   color: "",
   code: { hex: "" },
 };
-// const {push} = useHistory();
 
 const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
-  const { id } = useParams();
+  // const { push } = useHistory();
+  // const { id } = useParams();
 
   const editColor = (color) => {
     setEditing(true);
@@ -28,8 +28,8 @@ const ColorList = ({ colors, updateColors }) => {
       .put(`/api/colors/${colorToEdit.color}`, colorToEdit)
       .then((res) => {
         console.log(res);
+        // push(`colors/${colorToEdit.color}`);
         updateColors([...colors, res.data]);
-        // props.push(`colors/${colorToEdit.color}`);
       })
       .catch((err) => {
         console.log(err);
@@ -53,6 +53,7 @@ const ColorList = ({ colors, updateColors }) => {
     updateColors(colors.filter((color) => color.id !== Number(id)));
   };
 
+  const saveColors = () => {};
   return (
     <div className="colors-wrap">
       <p>colors</p>
