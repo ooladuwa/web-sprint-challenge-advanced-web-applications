@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Color from "./Color";
 import EditMenu from "./EditMenu";
+import Color from "./Color";
+import axiosWithAuth from "../helpers/axiosWithAuth";
+import { useParams, useHistory } from "react-router-dom";
 
 const initialColor = {
   color: "",
   code: { hex: "" },
 };
+// const {push} = useHistory();
 
 const ColorList = ({ colors, updateColors }) => {
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
+
+  const { id } = useParams();
 
   const editColor = (color) => {
     setEditing(true);
@@ -19,9 +24,34 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = (e) => {
     e.preventDefault();
+    axiosWithAuth()
+      .put(`/api/colors/${colorToEdit.color}`, colorToEdit)
+      .then((res) => {
+        console.log(res);
+        updateColors([...colors, res.data]);
+        // props.push(`colors/${colorToEdit.color}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const deleteColor = (color) => {};
+  const deleteColor = (color) => {
+    console.log(color);
+    axiosWithAuth()
+      .delete(`/api/colors/${color.id}`, color)
+      .then((res) => {
+        console.log(res);
+        filterColors(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const filterColors = (id) => {
+    updateColors(colors.filter((color) => color.id !== Number(id)));
+  };
 
   return (
     <div className="colors-wrap">
@@ -51,7 +81,3 @@ const ColorList = ({ colors, updateColors }) => {
 };
 
 export default ColorList;
-
-//Task List:
-//1. Complete the saveEdit functions by making a put request for saving colors. (Think about where will you get the id from...)
-//2. Complete the deleteColor functions by making a delete request for deleting colors.
